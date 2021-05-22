@@ -17,12 +17,16 @@
             <Ellipse Panel.ZIndex="3" Height="20" Canvas.Left="313" Fill="Red" Canvas.Top="28" Width="20" 
                      PreviewMouseDown="Ellipse_PreviewMouseDown"/>
         </Canvas>
-        <TextBlock Text="TextBlock" TextWrapping="Wrap" Margin="719,10,20,382"/>
         <StackPanel Margin="655,177,20,144">
             <Label>Przeszkody</Label>
             <RadioButton GroupName="Prostokąty" Content="Rysuj" HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="Radio_draw"/>
             <RadioButton GroupName="Prostokąty" Content="Usuwaj" HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="Radio_delete"/>
             <RadioButton GroupName="Prostokąty" Content="Wyłącz edycję" HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="Radio_stop"/>
         </StackPanel>
+        <TextBox HorizontalAlignment="Left" Margin="651,36,0,0" Text="200" Name="popCount" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="popCount_TextChanged"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="655,15,0,0" Text="Populacja" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Margin="651,80,0,0" Text="1" x:Name="MutationChance" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="MutationChance_TextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="655,59,0,0" Text="Procent mutacji" TextWrapping="Wrap" VerticalAlignment="Top"/>
     </Grid>
 </Window>

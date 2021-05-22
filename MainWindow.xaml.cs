@@ -30,6 +30,8 @@ namespace mrowki
         Point dragStart, offset;
         bool draw = false;
         bool del = false;
+        int populationCount;
+        float mutationChance;
         Rectangle rect;
         UIElement dragObject = null;
 
@@ -119,6 +121,20 @@ namespace mrowki
             del = true;
             draw = false;
         }
+
+        private void popCount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            this.populationCount = int.Parse(popCount.Text);
+        }
+
+        private void MutationChance_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            this.mutationChance = float.Parse(MutationChance.Text);
+            if(mutationChance>20)
+                MessageBox.Show("Wysoki procent może sprawić, że program nie będzie działał poprawnie!","Mutacje", MessageBoxButton.OK,MessageBoxImage.Warning);
+            this.mutationChance /= 100;
+        }
+
         private void Radio_stop(object sender, RoutedEventArgs e)
         {
             del = false;
