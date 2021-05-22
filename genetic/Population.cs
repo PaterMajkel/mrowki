@@ -4,7 +4,7 @@ using System.Text;
 
 namespace mrowki.genetic
 {
-    class Class1
+    class population
     {
     }
 }
