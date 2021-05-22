@@ -5,8 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mrowki"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Mrowki" Height="450" Width="800">
     <Grid>
 
+        <Canvas Name="Mrowisko" Background="Black" Focusable="True"  MouseDown="Mrowisko_MouseDown"
+            MouseMove="Mrowisko_MouseMove"
+            MouseUp="Mrowisko_MouseUp" Margin="0,0,154,0"
+                PreviewMouseDown="Rectangle_PreviewMouseDown">
+            <Ellipse Panel.ZIndex="2" Height="20" Canvas.Left="313" Fill="Green" Canvas.Top="375" Width="20" 
+                     PreviewMouseDown="Ellipse_PreviewMouseDown"/>
+            <Ellipse Panel.ZIndex="3" Height="20" Canvas.Left="313" Fill="Red" Canvas.Top="28" Width="20" 
+                     PreviewMouseDown="Ellipse_PreviewMouseDown"/>
+        </Canvas>
+        <TextBlock Text="TextBlock" TextWrapping="Wrap" Margin="719,10,20,382"/>
+        <StackPanel Margin="655,177,20,144">
+            <Label>Przeszkody</Label>
+            <RadioButton GroupName="Prostokąty" Content="Rysuj" HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="Radio_draw"/>
+            <RadioButton GroupName="Prostokąty" Content="Usuwaj" HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="Radio_delete"/>
+            <RadioButton GroupName="Prostokąty" Content="Wyłącz edycję" HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="Radio_stop"/>
+        </StackPanel>
     </Grid>
 </Window>

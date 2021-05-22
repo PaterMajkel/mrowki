@@ -1,27 +1,28 @@
-﻿using System;
+﻿using mrowki.points;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace mrowki.genetic
 {
-    class DNA
+    public class DNA
     {
         // The genetic sequence
-        int[] genes;
-
+        List<int> genes;
+        point location;
         /*
          * 234
          * 1 5
          * 876
          */
-        float fitness;
+        public float fitness;
         Random rand = new Random();
 
         // Constructor (makes a random DNA)
         public DNA(int num)
         {
-            genes = new int[num];
+            genes = new List<int>();
             for (int i = 0; i < genes.Count(); i++)
             {
                 genes[i] = (char)rand.Next(0, 8);  // Pick from range of chars
@@ -35,10 +36,12 @@ namespace mrowki.genetic
        // }
 
         // Fitness function (returns floating point % of "correct" characters)
-        public void Fitness(string target)
+        public float Fitness(float target)
         {
             //napisac funkcje fitness nadajaca punktacje w zaleznosci od czasu, odleglosci od celu i trafien w przeszkody
 
+
+            return fitness;
 
             
         }
