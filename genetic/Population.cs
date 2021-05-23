@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Windows;
 using System.Linq;
 using System.Text;
 
@@ -81,7 +81,6 @@ namespace mrowki.genetic
                 }
             }
 
-            Random rand = new Random();
             DNA[] newPopulation = new DNA[population.Length-1];
             // Refill the population with children from the mating pool
             for (int i = 0; i < population.Count(); i++)
