@@ -1,5 +1,6 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -7,22 +8,22 @@ namespace mrowki.genetic
 {
     public class Population
     {
-        float mutationRate;           // Mutation rate
+        double mutationRate;           // Mutation rate
         DNA[] population;             // Array to hold the current population
         List<DNA> matingPool;    // ArrayList which we will use for our "mating pool"
-        float target;                // Target phrase
+        Point target;                // Target phrase
         int generations;              // Number of generations
         bool finished;             // Are we finished evolving?
         int perfectScore;
 
-        public Population(string p, float m, int num)
+        public Population(Point fin, float m, int num, Point start)
         {
-            target = p;
+            target = fin;
             mutationRate = m;
             population = new DNA[num];
             for (int i = 0; i < population.Count(); i++)
             {
-                population[i] = new DNA((int)target);
+                population[i] = new DNA(start);
             }
             CalcFitness();
             matingPool = new List<DNA>();
@@ -42,12 +43,36 @@ namespace mrowki.genetic
         }
 
         // Generate a mating pool
-        public void NaturalSelection()
-        {
-            // Clear the ArrayList
-            matingPool.Clear();
 
-            float maxFitness = 0;
+
+        public DNA MonteCarlo(double maxFitness)
+        {
+            Random rand = new Random();
+            int escape = 0;
+            while(true)
+            {
+                int pop = rand.Next(0, population.Length);
+                int max = (int)Math.Floor(maxFitness * 10000) + 1;
+                int r = rand.Next(0, max);
+                DNA partner = this.population[pop];
+                if (r < partner.Fitness(target) * 10000)
+                {
+                    return partner;
+                }
+                escape++;
+                if(escape>10000)
+                {
+                    return null;
+                }
+
+            }
+            
+        }
+
+        // Create a new generation
+        public void Generate()
+        {
+            double maxFitness = 0;
             for (int i = 0; i < population.Count(); i++)
             {
                 if (population[i].fitness > maxFitness)
@@ -56,78 +81,74 @@ namespace mrowki.genetic
                 }
             }
 
-            //metoda monte carlo
-        }
-
-        // Create a new generation
-        public void Generate()
-        {
+            Random rand = new Random();
+            DNA[] newPopulation = new DNA[population.Length-1];
             // Refill the population with children from the mating pool
-            for (int i = 0; i < population.length; i++)
+            for (int i = 0; i < population.Count(); i++)
             {
-                int a = int(random(matingPool.size()));
-                int b = int(random(matingPool.size()));
-                DNA partnerA = matingPool.get(a);
-                DNA partnerB = matingPool.get(b);
-                DNA child = partnerA.crossover(partnerB);
-                child.mutate(mutationRate);
-                population[i] = child;
+                DNA partnerA = MonteCarlo(maxFitness);
+                DNA partnerB = MonteCarlo(maxFitness);
+
+                DNA child = partnerA.Crossover(partnerB);
+                child.Mutate(mutationRate);
+                newPopulation[i] = child;
             }
+            population = newPopulation;
             generations++;
         }
 
 
         // Compute the current "most fit" member of the population
-        public string GetBest()
+        public int GetBest()
         {
-            float worldrecord = (float)0.0;
+            double worldrecord = 0.0;
             int index = 0;
-            for (int i = 0; i < population.length; i++)
+            for (int i = 0; i < population.Length; i++)
             {
                 if (population[i].fitness > worldrecord)
                 {
                     index = i;
-                    worldrecord = population[i].fitness;
+                    worldrecord = population[i].Fitness(target);
                 }
             }
 
             if (worldrecord == perfectScore) finished = true;
-            return population[index].getPhrase();
+            return index;
         }
 
-        bool Finished()
+        public bool Finished()
         {
             return finished;
         }
 
-        int GetGenerations()
+        public int GetGenerations()
         {
             return generations;
         }
 
         // Compute average fitness for the population
-        float GetAverageFitness()
+        public double GetAverageFitness()
         {
-            float total = 0;
+            double total = 0;
             for (int i = 0; i < population.Count(); i++)
             {
-                total += population[i].fitness;
+                total += population[i].Fitness(target);
             }
             return total / (population.Count());
         }
 
-        string AllPhrases()
+        public Point[] AllLocations()
         {
-            string everything = "";
+            Point[] points = new Point[population.Length - 1];
 
             int displayLimit = Math.Min(population.Count(), 50);
 
 
             for (int i = 0; i < displayLimit; i++)
             {
-                everything += population[i].getPhrase() + "\n";
+                points[i] = population[i].currlocation;
             }
-            return everything;
+            return points;
         }
     }
-}*/
+}

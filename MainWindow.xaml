@@ -28,5 +28,8 @@
         <TextBlock HorizontalAlignment="Left" Margin="655,15,0,0" Text="Populacja" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBox HorizontalAlignment="Left" Margin="651,80,0,0" Text="1" x:Name="MutationChance" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="MutationChance_TextChanged"/>
         <TextBlock HorizontalAlignment="Left" Margin="655,59,0,0" Text="Procent mutacji" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Margin="651,124,0,0" Text="300" x:Name="TimeOfLife" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TimeOfLife_TextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="655,103,0,0" Text="Długość życia" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Button Content="Symuluj" HorizontalAlignment="Left" Margin="666,152,0,0" VerticalAlignment="Top" Width="86" Click="Button_Click"/>
     </Grid>
 </Window>

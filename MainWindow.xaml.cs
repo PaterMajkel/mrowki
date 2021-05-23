@@ -34,6 +34,7 @@ namespace mrowki
         float mutationChance;
         Rectangle rect;
         UIElement dragObject = null;
+        int timeOfLife = 0;
 
         private void Rectangle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -133,6 +134,16 @@ namespace mrowki
             if(mutationChance>20)
                 MessageBox.Show("Wysoki procent może sprawić, że program nie będzie działał poprawnie!","Mutacje", MessageBoxButton.OK,MessageBoxImage.Warning);
             this.mutationChance /= 100;
+        }
+
+        private void TimeOfLife_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            timeOfLife = int.Parse(TimeOfLife.Text);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void Radio_stop(object sender, RoutedEventArgs e)
