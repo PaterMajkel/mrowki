@@ -42,7 +42,13 @@ namespace mrowki.genetic
             }
         }
 
-        // Generate a mating pool
+        public void Move()
+        {
+            for (int i = 0; i < population.Count(); i++)
+            {
+                population[i].Step();
+            }
+        }
 
 
         public DNA MonteCarlo(double maxFitness)
@@ -72,6 +78,9 @@ namespace mrowki.genetic
         // Create a new generation
         public void Generate()
         {
+            for(int i=0; i<5; i++)
+            Move();
+
             double maxFitness = 0;
             for (int i = 0; i < population.Count(); i++)
             {
@@ -81,7 +90,7 @@ namespace mrowki.genetic
                 }
             }
 
-            DNA[] newPopulation = new DNA[population.Length-1];
+            DNA[] newPopulation = new DNA[population.Length];
             // Refill the population with children from the mating pool
             for (int i = 0; i < population.Count(); i++)
             {
@@ -138,12 +147,12 @@ namespace mrowki.genetic
 
         public Point[] AllLocations()
         {
-            Point[] points = new Point[population.Length - 1];
+            Point[] points = new Point[population.Length];
 
-            int displayLimit = Math.Min(population.Count(), 50);
+            //int displayLimit = Math.Min(population.Count(), 50);
 
 
-            for (int i = 0; i < displayLimit; i++)
+            for (int i = 0; i < population.Count(); i++)
             {
                 points[i] = population[i].currlocation;
             }

@@ -103,7 +103,7 @@ namespace mrowki.genetic
         {
             //napisac funkcje fitness nadajaca punktacje w zaleznosci od czasu, odleglosci od celu i trafien w przeszkody
 
-            double length = Math.Sqrt((target.X - currlocation.X) ^ 2 + (target.Y - currlocation.Y) ^ 2);
+            double length = Math.Sqrt(Math.Pow((target.X - currlocation.X), 2) + Math.Pow((target.Y - currlocation.Y), 2));
             if(length==0)
             {
                 length = 1;

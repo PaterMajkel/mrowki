@@ -17,7 +17,7 @@
             <Ellipse Panel.ZIndex="3" Height="20" Canvas.Left="313" Name="EndPoint" Fill="Red" Canvas.Top="28" Width="20" 
                      PreviewMouseDown="Ellipse_PreviewMouseDown"/>
         </Canvas>
-        <StackPanel Margin="655,177,20,144">
+        <StackPanel Margin="655,227,20,94">
             <Label>Przeszkody</Label>
             <RadioButton GroupName="Prostokąty" Content="Rysuj" HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="Radio_draw"/>
             <RadioButton GroupName="Prostokąty" Content="Usuwaj" HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="Radio_delete"/>
@@ -31,5 +31,7 @@
         <TextBox HorizontalAlignment="Left" Margin="651,124,0,0" Text="300" x:Name="TimeOfLife" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TimeOfLife_TextChanged"/>
         <TextBlock HorizontalAlignment="Left" Margin="655,103,0,0" Text="Długość życia" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <Button Content="Symuluj" HorizontalAlignment="Left" Margin="666,152,0,0" VerticalAlignment="Top" Width="86" Click="Button_Click"/>
+        <Button Content="Krok" HorizontalAlignment="Left" Margin="666,177,0,0" VerticalAlignment="Top" Width="86" Click="Step_Button"/>
+        <Button Content="50 Kroków" HorizontalAlignment="Left" Margin="666,202,0,0" VerticalAlignment="Top" Width="86" Click="Step50_Button"/>
     </Grid>
 </Window>

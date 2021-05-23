@@ -39,6 +39,7 @@ namespace mrowki
         UIElement dragObject = null;
         int timeOfLife = 0;
         Ellipse[] ellipses = null;
+        Population population = null;
 
         private void Rectangle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -155,26 +156,78 @@ namespace mrowki
             startPoint.X = Canvas.GetLeft(StartPoint);
             startPoint.Y = Canvas.GetTop(StartPoint);
 
-            Population population = new Population(endPoint, mutationChance, populationCount, startPoint);
+            population = new Population(endPoint, mutationChance, populationCount, startPoint);
 
-            while(!population.Finished())
+            //Step(population);
+            /*while(!population.Finished())
             {
                 population.Generate();
                 population.CalcFitness();
-                Draw(population.AllLocations());
+                UnDraw();
+                Draw(population.AllLocations(), population.GetBest());
                 Thread.Sleep(10);
-            }
+            }*/
+        }
+        private void Step_Button(object sender, RoutedEventArgs e)
+        {
+            Step();
+        }
+        private void Step()
+        {
+            population.Generate();
+            population.CalcFitness();
+            UnDraw();
+            Draw(population.AllLocations(), population.GetBest());
         }
         private void UnDraw()
         {
+            if(ellipses!=null)
             foreach( var x in ellipses)
             {
                 Mrowisko.Children.Remove(x);
             }
         }
-        private void Draw(Point[] points)
+        private void Draw(Point[] points, int thebest)
         {
+            int i = 0;
+            ellipses = new Ellipse[populationCount];
+            foreach( var x in points)
+            {
+                if(i==thebest)
+                {
+                    ellipses[i] = new Ellipse
+                    {
+                        Fill = Brushes.Purple,
+                        Height = 20,
+                        Width = 20,
+                        StrokeThickness = 0,
 
+                    };
+                    Canvas.SetZIndex(ellipses[i],50000);
+                }
+                   
+                else
+                    ellipses[i] = new Ellipse
+                    {
+                        Fill = Brushes.Blue,
+                        Height = 20,
+                        Width = 20,
+                        StrokeThickness=0,
+                    };
+                Canvas.SetTop(ellipses[i], x.Y);
+                Canvas.SetLeft(ellipses[i], x.X);
+
+                Mrowisko.Children.Add(ellipses[i]);
+                i++;
+            }
+        }
+
+        private void Step50_Button(object sender, RoutedEventArgs e)
+        {
+            for(int i=0; i<50; i++)
+            {
+                Step();
+            }
         }
 
         private void Radio_stop(object sender, RoutedEventArgs e)
