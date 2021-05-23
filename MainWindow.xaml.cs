@@ -1,4 +1,5 @@
-﻿using System;
+﻿using mrowki.genetic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -13,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Threading;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace mrowki
 {
@@ -35,6 +38,7 @@ namespace mrowki
         Rectangle rect;
         UIElement dragObject = null;
         int timeOfLife = 0;
+        Ellipse[] ellipses = null;
 
         private void Rectangle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -142,6 +146,33 @@ namespace mrowki
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Point endPoint = new Point();
+            endPoint.X = Canvas.GetLeft(EndPoint);
+            endPoint.Y = Canvas.GetTop(EndPoint);
+
+            Point startPoint = new Point();
+            startPoint.X = Canvas.GetLeft(StartPoint);
+            startPoint.Y = Canvas.GetTop(StartPoint);
+
+            Population population = new Population(endPoint, mutationChance, populationCount, startPoint);
+
+            while(!population.Finished())
+            {
+                population.Generate();
+                population.CalcFitness();
+                Draw(population.AllLocations());
+                Thread.Sleep(10);
+            }
+        }
+        private void UnDraw()
+        {
+            foreach( var x in ellipses)
+            {
+                Mrowisko.Children.Remove(x);
+            }
+        }
+        private void Draw(Point[] points)
         {
 
         }

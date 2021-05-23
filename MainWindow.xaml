@@ -12,9 +12,9 @@
             MouseMove="Mrowisko_MouseMove"
             MouseUp="Mrowisko_MouseUp" Margin="0,0,154,0"
                 PreviewMouseDown="Rectangle_PreviewMouseDown">
-            <Ellipse Panel.ZIndex="2" Height="20" Canvas.Left="313" Fill="Green" Canvas.Top="375" Width="20" 
+            <Ellipse Panel.ZIndex="2" Height="20" Canvas.Left="313" Name="StartPoint" Fill="Green" Canvas.Top="375" Width="20" 
                      PreviewMouseDown="Ellipse_PreviewMouseDown"/>
-            <Ellipse Panel.ZIndex="3" Height="20" Canvas.Left="313" Fill="Red" Canvas.Top="28" Width="20" 
+            <Ellipse Panel.ZIndex="3" Height="20" Canvas.Left="313" Name="EndPoint" Fill="Red" Canvas.Top="28" Width="20" 
                      PreviewMouseDown="Ellipse_PreviewMouseDown"/>
         </Canvas>
         <StackPanel Margin="655,177,20,144">
