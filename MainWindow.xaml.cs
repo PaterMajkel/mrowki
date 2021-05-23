@@ -181,10 +181,15 @@ namespace mrowki
         }
         private void Step()
         {
+
             population.Generate();
             population.CalcFitness();
             UnDraw();
-            Draw(population.AllEndLocations(),population.GetBest());
+
+            Draw(population.AllEndLocations(), population.GetBest());
+
+
+
         }
         private void UnDraw()
         {
@@ -200,7 +205,6 @@ namespace mrowki
             ellipses = new Ellipse[population.population.Length];
             for(int j=0; j< population.population.Length; j++)
             {
-                thebest = population.GetBest();
                 if (j == thebest)
                 {
                     ellipses[j] = new Ellipse
