@@ -156,7 +156,7 @@ namespace mrowki
             startPoint.X = Canvas.GetLeft(StartPoint);
             startPoint.Y = Canvas.GetTop(StartPoint);
 
-            population = new Population(endPoint, mutationChance, populationCount, startPoint);
+            population = new Population(endPoint, mutationChance, populationCount, startPoint,timeOfLife);
 
             //Step(population);
             /*while(!population.Finished())
@@ -170,6 +170,13 @@ namespace mrowki
         }
         private void Step_Button(object sender, RoutedEventArgs e)
         {
+            int i = timeOfLife;
+            while (i > 0)
+            {
+                //population.Move();
+                //Thread.Sleep(1);
+                i--;
+            }
             Step();
         }
         private void Step()
@@ -177,7 +184,7 @@ namespace mrowki
             population.Generate();
             population.CalcFitness();
             UnDraw();
-            Draw(population.AllLocations(), population.GetBest());
+            Draw(population.AllEndLocations(),population.GetBest());
         }
         private void UnDraw()
         {
@@ -187,15 +194,16 @@ namespace mrowki
                 Mrowisko.Children.Remove(x);
             }
         }
-        private void Draw(Point[] points, int thebest)
+        private void Draw(Point[] points,int thebest)
         {
-            int i = 0;
-            ellipses = new Ellipse[populationCount];
-            foreach( var x in points)
+
+            ellipses = new Ellipse[population.population.Length];
+            for(int j=0; j< population.population.Length; j++)
             {
-                if(i==thebest)
+                thebest = population.GetBest();
+                if (j == thebest)
                 {
-                    ellipses[i] = new Ellipse
+                    ellipses[j] = new Ellipse
                     {
                         Fill = Brushes.Purple,
                         Height = 20,
@@ -203,31 +211,39 @@ namespace mrowki
                         StrokeThickness = 0,
 
                     };
-                    Canvas.SetZIndex(ellipses[i],50000);
+                    Canvas.SetZIndex(ellipses[j], 50000);
                 }
-                   
+
                 else
-                    ellipses[i] = new Ellipse
+                    ellipses[j] = new Ellipse
                     {
                         Fill = Brushes.Blue,
                         Height = 20,
                         Width = 20,
-                        StrokeThickness=0,
+                        StrokeThickness = 0,
                     };
-                Canvas.SetTop(ellipses[i], x.Y);
-                Canvas.SetLeft(ellipses[i], x.X);
+                Canvas.SetTop(ellipses[j], points[j].Y);
+                Canvas.SetLeft(ellipses[j], points[j].X);
 
-                Mrowisko.Children.Add(ellipses[i]);
-                i++;
+                Mrowisko.Children.Add(ellipses[j]);
             }
+            
+                    
+            GenCount.Text = String.Format($"Generacja: {population.generations}");
         }
 
         private void Step50_Button(object sender, RoutedEventArgs e)
         {
-            for(int i=0; i<50; i++)
+            UnDraw();
+
+            for (int i=0; i<50; i++)
             {
-                Step();
+                int j = timeOfLife;
+               
+                population.Generate();
+                population.CalcFitness();
             }
+            Draw(population.AllEndLocations(), population.GetBest());
         }
 
         private void Radio_stop(object sender, RoutedEventArgs e)

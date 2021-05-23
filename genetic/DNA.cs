@@ -9,7 +9,7 @@ namespace mrowki.genetic
     public class DNA
     {
         // The genetic sequence
-        List<int> genes;
+        int[] genes;
         Point slocation;
         public Point currlocation;
         /*
@@ -23,14 +23,31 @@ namespace mrowki.genetic
         Random rand = new Random();
 
         // Constructor (makes a random DNA)
-        public DNA(Point location)
+        public DNA(Point location,int time)
         {
-            genes = new List<int>();
+            genes = new int[time];
             this.slocation = location;
             this.currlocation = location;
 
-                genes.Add(rand.Next(1, 8));
-            changeLocation(genes[genes.Count - 1]);
+            for(int i=0; i<time; i++)
+            {
+                genes[i]=rand.Next(1, 8);
+                changeLocation(genes[i]);
+            }
+
+        }
+
+        public Point FinalLocation()
+        {
+            for(int i=0; i<genes.Length; i++)
+                changeLocation(genes[i]);
+            return currlocation;
+
+        }
+        public Point StepLocation(int i)
+        {
+            changeLocation(genes[i]);
+            return currlocation;
         }
         public void changeLocation(int a)
         {
@@ -38,47 +55,46 @@ namespace mrowki.genetic
             {
                 case 1:
                     {
-                        currlocation.X -= 5;
-                        currlocation.Y += 5;
+                        currlocation.X -= 3;
+                        currlocation.Y += 3;
                         break;
                     }
                 case 2:
                     {
-                        currlocation.Y += 5;
+                        currlocation.Y += 3;
                         break;
                     }
                 case 3:
                     {
-                        currlocation.X += 5;
-                        currlocation.Y += 5;
+                        currlocation.X += 3;
+                        currlocation.Y += 3;
                         break;
                     }
                 case 4:
                     {
-                        currlocation.X -= 5; 
+                        currlocation.X -= 3; 
                         break;
                     }
                 case 5:
                     {
-                        currlocation.X += 5;
+                        currlocation.X += 3;
                         break;
                     }
                 case 6:
                     {
-                        currlocation.X -= 5;
-                        currlocation.Y -= 5;
+                        currlocation.X -= 3;
+                        currlocation.Y -= 3;
                         break;
                     }
                 case 7:
                     {
-                        currlocation.X -= 5;
-                        currlocation.Y -= 5;
+                        currlocation.Y -= 3;
                         break;
                     }
                 case 8:
                     {
-                        currlocation.X += 5;
-                        currlocation.Y -= 5;
+                        currlocation.X += 3;
+                        currlocation.Y -= 3;
                         break;
                     }
 
@@ -86,11 +102,7 @@ namespace mrowki.genetic
             }
         }
 
-        public void Step()
-        {
-            genes.Add(rand.Next(1, 8));
-            changeLocation(genes[genes.Count - 1]);
-        }
+        
 
         // Converts character array to a String
        // string getPhrase()
@@ -119,15 +131,15 @@ namespace mrowki.genetic
         public DNA Crossover(DNA partner)
         {
             // A new child
-            DNA child = new DNA(slocation);
+            DNA child = new DNA(slocation, partner.genes.Length);
 
             int midpoint = (int)rand.Next(genes.Count()); // Pick a midpoint
 
             // Half from one, half from the other
             for (int i = 0; i < genes.Count(); i++)
             {
-                if (i > midpoint) child.genes.Add(genes[i]);
-                else child.genes.Add(partner.genes[i]);
+                if (i > midpoint) child.genes[i]=genes[i];
+                else child.genes[i]=partner.genes[i];
             }
             return child;
         }

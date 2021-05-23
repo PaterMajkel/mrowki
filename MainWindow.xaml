@@ -33,5 +33,6 @@
         <Button Content="Symuluj" HorizontalAlignment="Left" Margin="666,152,0,0" VerticalAlignment="Top" Width="86" Click="Button_Click"/>
         <Button Content="Krok" HorizontalAlignment="Left" Margin="666,177,0,0" VerticalAlignment="Top" Width="86" Click="Step_Button"/>
         <Button Content="50 Kroków" HorizontalAlignment="Left" Margin="666,202,0,0" VerticalAlignment="Top" Width="86" Click="Step50_Button"/>
+        <TextBlock HorizontalAlignment="Left" Margin="650,381,0,0" Text="Generacja:" Name="GenCount" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="20" Width="140"/>
     </Grid>
 </Window>
