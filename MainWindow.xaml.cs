@@ -16,6 +16,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
 using System.Runtime.InteropServices.ComTypes;
+using System.IO;
+using System.Windows.Threading;
 
 namespace mrowki
 {
@@ -24,11 +26,16 @@ namespace mrowki
     /// </summary>
     public partial class MainWindow : Window
     {
+        DispatcherTimer timer = new DispatcherTimer();
+
         public MainWindow()
         {
             InitializeComponent();
+            timer.Tick += MainTimerEvent;
+            timer.Interval = TimeSpan.FromMilliseconds(0.1*howoften);
         }
 
+      
         Brush color = new SolidColorBrush(Color.FromRgb((byte)255,(byte)255,(byte)255));
         Point dragStart, offset;
         bool draw = false;
@@ -40,7 +47,39 @@ namespace mrowki
         int timeOfLife = 0;
         Ellipse[] ellipses = null;
         Population population = null;
+        List<Rectangle> rects = new List<Rectangle>();
+        int i = 0;
+        int howoften = 1;
+        bool goFurther = false;
+        bool stop50 = false;
 
+        private void MainTimerEvent(object sender, EventArgs e)
+        {
+            if(i==timeOfLife)
+            {
+                population.Generate();
+                i = 0;
+            }
+            Generation.Text = i.ToString();
+
+            population.CalcFitness();
+
+                UnDraw();
+                Draw(population.GetLocations(), population.GetBest());
+            
+            population.Update(i);
+
+                
+            //population.NaturalSelection();
+
+            if (population.finished && !goFurther)
+            {
+                timer.Stop();
+                MessageBox.Show("Odnaleziono cel", "Cel", MessageBoxButton.OK, MessageBoxImage.Information);
+                goFurther = true;
+            }
+            i++;
+        }
         private void Rectangle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (del)
@@ -48,6 +87,7 @@ namespace mrowki
                 if (e.OriginalSource is Rectangle)
                 {
                     Rectangle activeRectangle = (Rectangle)e.OriginalSource;
+                    rects.Remove(activeRectangle);
                     Mrowisko.Children.Remove(activeRectangle);
                 }
             }
@@ -67,6 +107,8 @@ namespace mrowki
                 Fill=color,
             };
             Mrowisko.Children.Add(rect);
+            rects.Add(rect);
+
         }
 
         private void Mrowisko_MouseMove(object sender, MouseEventArgs e)
@@ -74,7 +116,9 @@ namespace mrowki
             if (draw)
             {
                 if (!Mrowisko.IsMouseCaptured)
+                {
                     return;
+                }
 
                 Point location = e.MouseDevice.GetPosition(Mrowisko);
 
@@ -91,6 +135,7 @@ namespace mrowki
 
                 rect.Height = Math.Abs(height);
                 rect.Width = Math.Abs(width);
+
             }
             else if (this.dragObject != null)
             {
@@ -151,12 +196,22 @@ namespace mrowki
             Point endPoint = new Point();
             endPoint.X = Canvas.GetLeft(EndPoint);
             endPoint.Y = Canvas.GetTop(EndPoint);
+            AntData.target = endPoint;
 
             Point startPoint = new Point();
             startPoint.X = Canvas.GetLeft(StartPoint);
             startPoint.Y = Canvas.GetTop(StartPoint);
+            AntData.start = startPoint;
 
-            population = new Population(endPoint, mutationChance, populationCount, startPoint,timeOfLife);
+            AntData.mutationrate = mutationChance;
+            AntData.lifetime = timeOfLife;
+            population = new Population( mutationChance, populationCount,timeOfLife,ref rects, ref Mrowisko);
+            goFurther = false;
+
+            timer.Start();
+
+            //Window1 win1 = new Window1();
+            //win1.Show();
 
             //Step(population);
             /*while(!population.Finished())
@@ -170,25 +225,52 @@ namespace mrowki
         }
         private void Step_Button(object sender, RoutedEventArgs e)
         {
-            int i = timeOfLife;
-            while (i > 0)
-            {
                 //population.Move();
                 //Thread.Sleep(1);
-                i--;
-            }
             Step();
         }
         private void Step()
         {
 
-            population.Generate();
-            population.CalcFitness();
+            //population.Generate();
+            //population.CalcFitness();
+            ////population.NaturalSelection();
+            //
+            //UnDraw();
+            //
+            //Draw(population.GetEndLocations(), population.GetBest());
+            //
+            //if (population.finished)
+            //    MessageBox.Show("Odnaleziono cel", "Cel", MessageBoxButton.OK, MessageBoxImage.Information);
+            i = 0;
+            while(i<timeOfLife)
+            {
+                if (i == 0)
+                {
+                    population.Generate();
+
+                }
+
+                population.CalcFitness();
+
+               
+
+                population.Update(i);
+
+
+                //population.NaturalSelection();
+
+                if (population.finished && !goFurther)
+                {
+                    timer.Stop();
+                    MessageBox.Show("Odnaleziono cel", "Cel", MessageBoxButton.OK, MessageBoxImage.Information);
+                    stop50=true;
+                    goFurther = true;
+                }
+                i++;
+            }
             UnDraw();
-
-            Draw(population.AllEndLocations(), population.GetBest());
-
-
+            Draw(population.GetLocations(), population.GetBest());
 
         }
         private void UnDraw()
@@ -238,16 +320,35 @@ namespace mrowki
 
         private void Step50_Button(object sender, RoutedEventArgs e)
         {
-            UnDraw();
+            stop50 = false;
 
-            for (int i=0; i<50; i++)
+            for (int j=0; j<50; j++)
             {
-                int j = timeOfLife;
-               
-                population.Generate();
-                population.CalcFitness();
+                Step();
+                if (stop50)
+                    break;
             }
-            Draw(population.AllEndLocations(), population.GetBest());
+            UnDraw();
+            Draw(population.GetLocations(), population.GetBest());
+
+        }
+
+        private void GoOn(object sender, RoutedEventArgs e)
+        {
+            timer.Start();
+        }
+
+        private void StopNow(object sender, RoutedEventArgs e)
+        {
+            timer.Stop();
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            howoften = (int)slValue.Value;
+            if (howoften == 0)
+                howoften = 1;
+            timer.Interval = TimeSpan.FromMilliseconds(0.1 * howoften);
         }
 
         private void Radio_stop(object sender, RoutedEventArgs e)
@@ -255,7 +356,8 @@ namespace mrowki
             del = false;
             draw = false;
         }
-
         
+
+
     }
 }

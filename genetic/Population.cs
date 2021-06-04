@@ -5,29 +5,35 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography.X509Certificates;
 using System.Globalization;
+using System.Windows.Controls.Primitives;
+using System.Windows.Shapes;
+using System.Windows.Controls;
 
 namespace mrowki.genetic
 {
     public class Population
     {
         double mutationRate;           // Mutation rate
-        public DNA[] population;             // Array to hold the current population
-       // List<DNA> matingPool;    // ArrayList which we will use for our "mating pool"
-        Point target;                // Target phrase
+        public Ant[] population;             // Array to hold the current population
+        List<Ant> matingPool;    // ArrayList which we will use for our "mating pool"
         public int generations;              // Number of generations
-        bool finished;             // Are we finished evolving?
+        public bool finished;             // Are we finished evolving?
         int perfectScore;
         public int time;
-
-        public Population(Point fin, float m, int num, Point start, int time)
+        public List<Rectangle> rectangles;
+        Canvas Mrowisko;
+        public Population(float m, int num, int time, ref List<Rectangle> rectangles, ref Canvas Mrowisko)
         {
-            target = fin;
+            this.Mrowisko = Mrowisko;
+            this.rectangles = rectangles;
             mutationRate = m;
-            population = new DNA[num];
+            population = new Ant[num];
             this.time = time;
+            matingPool = new List<Ant>();
             for (int i = 0; i < population.Count(); i++)
             {
-                population[i] = new DNA(start,time);
+                population[i] = new Ant();
+                matingPool.Add(population[i]);
             }
             CalcFitness();
             //matingPool = new List<DNA>();
@@ -42,35 +48,35 @@ namespace mrowki.genetic
         {
             for (int i = 0; i < population.Count(); i++)
             {
-                population[i].Fitness(target);
+                population[i].Fitness();
             }
         }
 
 
 
 
-        public DNA MonteCarlo(double maxFitness)
+        public Ant MonteCarlo(double maxFitness)
         {
             Random rand = new Random();
             int escape = 0;
-            while(true)
+            while (true)
             {
                 int pop = rand.Next(0, population.Length);
-                int max = (int)Math.Floor(maxFitness * 10000) + 1;
+                int max = (int)Math.Floor(maxFitness * 1000) + 1;
                 int r = rand.Next(0, max);
-                DNA partner = this.population[pop];
-                if (r < partner.Fitness(target) * 10000)
+                Ant partner = this.population[pop];
+                if (r < partner.Fitness() * 1000)
                 {
                     return partner;
                 }
                 escape++;
-                if(escape>10000)
+                if (escape > 10000)
                 {
                     return null;
                 }
 
             }
-            
+
         }
 
         // Create a new generation
@@ -86,20 +92,54 @@ namespace mrowki.genetic
                 }
             }
 
-            DNA[] newPopulation = new DNA[population.Length];
+            Ant[] newPopulation = new Ant[population.Length];
             // Refill the population with children from the mating pool
             for (int i = 0; i < population.Count(); i++)
             {
-                DNA partnerA = MonteCarlo(maxFitness);
-                DNA partnerB = MonteCarlo(maxFitness);
-
-                DNA child = partnerA.Crossover(partnerB);
-                child.Mutate(mutationRate);
+                Ant partnerA = MonteCarlo(maxFitness);
+                Ant partnerB = MonteCarlo(maxFitness);
+                Ant child = new Ant();
+                child.gene = partnerA.gene.Crossover(partnerB.gene);
+                child.gene.Mutate(mutationRate);
                 newPopulation[i] = child;
             }
             population = newPopulation;
             generations++;
         }
+
+        /*public void NaturalSelection()
+        {
+            matingPool.Clear();
+            CalcFitness();
+            foreach (DNA c in population)
+            {
+                for (int i = 0; i < (c.fitness * 100); i++)
+                {
+                    matingPool.Add(c);
+                }
+            }
+            DNA best = population[GetBest()];
+            for (int i = 0; i < best.fitness * 100; i++)
+            {
+                matingPool.Add(best);
+            }
+        }
+        public void Generate()
+        {
+            Random random = new Random();
+            for (int i = 0; i < population.Count(); i++)
+            {
+                int a = random.Next() % matingPool.Count;
+                int b = random.Next() % matingPool.Count;
+                DNA parent1 = matingPool[a];
+                DNA parent2 = matingPool[b];
+                DNA child = parent1.Crossover(parent2);
+                child.Mutate(mutationRate);
+                population[i] = child;
+
+            }
+            generations++;
+        }*/
 
 
         // Compute the current "most fit" member of the population
@@ -113,6 +153,8 @@ namespace mrowki.genetic
                 {
                     index = i;
                     worldrecord = population[i].fitness;
+                    if (population[i].finished)
+                        finished = true;
                 }
             }
 
@@ -136,44 +178,38 @@ namespace mrowki.genetic
             double total = 0;
             for (int i = 0; i < population.Count(); i++)
             {
-                total += population[i].Fitness(target);
+                total += population[i].fitness;
             }
             return total / (population.Count());
         }
-        public Point[] GetLocations(int j)
+
+        public Point[] GetLocations()
         {
-            Point[] points = new Point[population.Count()];
-
-
-            for (int i = 0; i < population.Count(); i++)
+            Point[] points = new Point[population.Length];
+            for (int i = 0; i < population.Length; i++)
             {
-                points[i] = population[i].StepLocation(j);
+                points[i] = population[i].currentPos;
             }
-            
-
             return points;
+
         }
-        public Point[] AllEndLocations()
+        public Point[] GetEndLocations()
         {
-
-            //int displayLimit = Math.Min(population.Count(), 50);
-            Point[] points = new Point[population.Count()];
-
-
-            for (int i = 0; i < population.Count(); i++)
+            Point[] points = new Point[population.Length];
+            for (int i = 0; i < population.Length; i++)
             {
-                points[i] = population[i].FinalLocation();
+                points[i] = population[i].endPosition;
             }
-            /*if (best > displayLimit)
-                points[25] = population[best].currlocation;
-            else
-            {
-                Point pom = points[25];
-                points[25] = points[best];
-                points[best] = pom;
-            }*/
+            return points;
 
-                return points;
+        }
+
+        public void Update(int index)
+        {
+            for (int i = 0; i < population.Length; i++)
+            {
+                population[i].Update(index, ref rectangles, ref Mrowisko);
+            }
         }
     }
 }

@@ -5,34 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mrowki"
         mc:Ignorable="d"
-        Title="Mrowki" Height="450" Width="800">
+        Title="Mrowki" Height="450" Width="796" ResizeMode="NoResize">
     <Grid>
 
         <Canvas Name="Mrowisko" Background="Black" Focusable="True"  MouseDown="Mrowisko_MouseDown"
             MouseMove="Mrowisko_MouseMove"
-            MouseUp="Mrowisko_MouseUp" Margin="0,0,154,0"
-                PreviewMouseDown="Rectangle_PreviewMouseDown">
+            MouseUp="Mrowisko_MouseUp" Margin="0,0,185,0"
+                PreviewMouseDown="Rectangle_PreviewMouseDown" Height="435" Width="645">
             <Ellipse Panel.ZIndex="2" Height="20" Canvas.Left="313" Name="StartPoint" Fill="Green" Canvas.Top="375" Width="20" 
                      PreviewMouseDown="Ellipse_PreviewMouseDown"/>
             <Ellipse Panel.ZIndex="3" Height="20" Canvas.Left="313" Name="EndPoint" Fill="Red" Canvas.Top="28" Width="20" 
                      PreviewMouseDown="Ellipse_PreviewMouseDown"/>
+            <TextBlock Canvas.Left="593" Canvas.Top="385" Text="0" TextWrapping="Wrap" Height="40" Width="52" Name="Generation"  Foreground="White" FontSize="20" FontFamily="OCR A Std"/>
         </Canvas>
         <StackPanel Margin="655,227,20,94">
-            <Label>Przeszkody</Label>
+            <Label Content="Przeszkody"/>
             <RadioButton GroupName="Prostokąty" Content="Rysuj" HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="Radio_draw"/>
             <RadioButton GroupName="Prostokąty" Content="Usuwaj" HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="Radio_delete"/>
             <RadioButton GroupName="Prostokąty" Content="Wyłącz edycję" HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="Radio_stop"/>
         </StackPanel>
-        <TextBox HorizontalAlignment="Left" Margin="651,36,0,0" Text="200" Name="popCount" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="popCount_TextChanged"/>
+        <TextBox HorizontalAlignment="Left" Margin="660,36,0,0" Text="200" Name="popCount" TextWrapping="Wrap" VerticalAlignment="Top" Width="86" TextChanged="popCount_TextChanged"/>
 
-        <TextBlock HorizontalAlignment="Left" Margin="655,15,0,0" Text="Populacja" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="651,80,0,0" Text="1" x:Name="MutationChance" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="MutationChance_TextChanged"/>
-        <TextBlock HorizontalAlignment="Left" Margin="655,59,0,0" Text="Procent mutacji" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="651,124,0,0" Text="300" x:Name="TimeOfLife" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TimeOfLife_TextChanged"/>
-        <TextBlock HorizontalAlignment="Left" Margin="655,103,0,0" Text="Długość życia" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <Button Content="Symuluj" HorizontalAlignment="Left" Margin="666,152,0,0" VerticalAlignment="Top" Width="86" Click="Button_Click"/>
-        <Button Content="Krok" HorizontalAlignment="Left" Margin="666,177,0,0" VerticalAlignment="Top" Width="86" Click="Step_Button"/>
-        <Button Content="50 Kroków" HorizontalAlignment="Left" Margin="666,202,0,0" VerticalAlignment="Top" Width="86" Click="Step50_Button"/>
-        <TextBlock HorizontalAlignment="Left" Margin="650,381,0,0" Text="Generacja:" Name="GenCount" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="20" Width="140"/>
+        <TextBlock HorizontalAlignment="Left" Margin="682,15,0,0" Text="Populacja" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Margin="660,80,0,0" Text="1" x:Name="MutationChance" TextWrapping="Wrap" VerticalAlignment="Top" Width="86" TextChanged="MutationChance_TextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="660,59,0,0" Text="Procent mutacji" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Margin="660,124,0,0" Text="300" x:Name="TimeOfLife" TextWrapping="Wrap" VerticalAlignment="Top" Width="86" TextChanged="TimeOfLife_TextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="660,103,0,0" Text="Długość życia" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Button Content="Symuluj" HorizontalAlignment="Left" Margin="660,152,0,0" VerticalAlignment="Top" Width="86" Click="Button_Click"/>
+        <Button Content="Krok" HorizontalAlignment="Left" Margin="660,177,0,0" VerticalAlignment="Top" Width="86" Click="Step_Button"/>
+        <Button Content="50 Kroków" HorizontalAlignment="Left" Margin="660,202,0,0" VerticalAlignment="Top" Width="86" Click="Step50_Button"/>
+        <TextBlock HorizontalAlignment="Left" Margin="650,381,0,0" Text="Generacja:" Name="GenCount" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="15" Width="180"/>
+        <Button Content="Start Timer" HorizontalAlignment="Left" Margin="660,308,0,0" VerticalAlignment="Top" Width="86" Click="GoOn"/>
+        <Button Content="Stop Timer" HorizontalAlignment="Left" Margin="660,333,0,0" VerticalAlignment="Top" Width="86" Click="StopNow"/>
+        <Slider HorizontalAlignment="Left" Margin="658,358,0,0" VerticalAlignment="Top" Width="88" Maximum="1000" TickFrequency="1" IsSnapToTickEnabled="True" Name="slValue" ValueChanged="Slider_ValueChanged"/>
     </Grid>
 </Window>
