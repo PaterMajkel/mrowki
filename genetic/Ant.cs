@@ -18,6 +18,7 @@ namespace mrowki.genetic
         public DNA gene;
         public Point currentPos = AntData.start;
         public Point endPosition = AntData.start;
+        int index;
 
         public Ant()
         {
@@ -35,13 +36,12 @@ namespace mrowki.genetic
             {
                 length = 1;
             }
-            fitness = 1 / length;
+            fitness = (1 / length) + 1/(1+index)/10;
 
             if (hitawall)
                 fitness *= 0.2;
             if (outofbounds)
                 fitness *= 0.2;
-
             if (finished)
                 fitness *= 100;
 
@@ -128,8 +128,9 @@ namespace mrowki.genetic
 
         public void Update(int index, ref List<Rectangle> rects, ref Canvas Mrowisko)
         {
-            if (isDead)
+            if (isDead || finished)
                 return;
+            this.index = index;
             changeLocation(gene.genes[index]);
             if(Math.Abs(currentPos.X-AntData.target.X)<10 && Math.Abs(currentPos.Y-AntData.target.Y)<10)
             {
