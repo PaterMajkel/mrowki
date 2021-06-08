@@ -175,20 +175,46 @@ namespace mrowki
 
         private void popCount_TextChanged(object sender, TextChangedEventArgs e)
         {
-            this.populationCount = int.Parse(popCount.Text);
+            try
+            {
+                this.populationCount = int.Parse(popCount.Text);
+            }
+            catch
+            {
+                popCount.Text = 0.ToString();
+                this.populationCount = 0;
+            }
         }
 
         private void MutationChance_TextChanged(object sender, TextChangedEventArgs e)
         {
-            this.mutationChance = float.Parse(MutationChance.Text);
-            if(mutationChance>20)
+            try
+            {
+                this.mutationChance = float.Parse(MutationChance.Text);
+            }
+            catch
+            {
+                MutationChance.Text = 0.ToString();
+                this.mutationChance = 0;
+            }
+            if (mutationChance>20)
                 MessageBox.Show("Wysoki procent może sprawić, że program nie będzie działał poprawnie!","Mutacje", MessageBoxButton.OK,MessageBoxImage.Warning);
             this.mutationChance /= 100;
         }
 
         private void TimeOfLife_TextChanged(object sender, TextChangedEventArgs e)
         {
-            timeOfLife = int.Parse(TimeOfLife.Text);
+            try
+            {
+                timeOfLife = int.Parse(TimeOfLife.Text);
+            }
+            catch
+            {
+                timeOfLife = 0;
+                TimeOfLife.Text = 0.ToString();
+                MessageBox.Show("Musisz najpierw wyłączyć timer i po zmianie zresetować symulację.", "Mutacje", MessageBoxButton.OK, MessageBoxImage.Warning);
+                timer.Stop();
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -231,7 +257,6 @@ namespace mrowki
         }
         private void Step()
         {
-
             //population.Generate();
             //population.CalcFitness();
             ////population.NaturalSelection();
