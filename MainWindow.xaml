@@ -17,6 +17,11 @@
             <Ellipse Panel.ZIndex="3" Height="20" Canvas.Left="313" Name="EndPoint" Fill="Red" Canvas.Top="28" Width="20" 
                      PreviewMouseDown="Ellipse_PreviewMouseDown"/>
             <TextBlock Canvas.Left="593" Canvas.Top="385" Text="0" TextWrapping="Wrap" Height="40" Width="52" Name="Generation"  Foreground="White" FontSize="20" FontFamily="OCR A Std"/>
+            <TextBlock Canvas.Left="35" Canvas.Top="385" Text="0" TextWrapping="Wrap" Height="40" Width="108" x:Name="AvarageFitness"  Foreground="White" FontSize="20" FontFamily="OCR A Std"/>
+            <TextBlock Canvas.Left="35" Canvas.Top="355" Text="0" TextWrapping="Wrap" Height="40" Width="109" x:Name="BestFitness"  Foreground="White" FontSize="20" FontFamily="OCR A Std"/>
+            <TextBlock Canvas.Top="357" Text="BEST" TextWrapping="Wrap" Height="38" Width="70" Foreground="White"/>
+            <TextBlock Canvas.Top="385" Text="AVG" TextWrapping="Wrap" Height="38" Width="70" Foreground="White"/>
+            <TextBlock Canvas.Top="385" Text="LIFE" TextWrapping="Wrap" Height="38" Width="70" Foreground="White" Canvas.Left="565"/>
         </Canvas>
         <StackPanel Margin="655,227,20,94">
             <Label Content="Przeszkody"/>

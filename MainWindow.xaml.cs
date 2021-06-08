@@ -61,13 +61,26 @@ namespace mrowki
                 i = 0;
             }
             Generation.Text = i.ToString();
-
-            population.CalcFitness();
+            try
+            {
+                population.CalcFitness();
+            }
+            catch (NullReferenceException)
+            {
+                timer.Stop();
+                MessageBox.Show("Włącz najpierw symulację", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
                 UnDraw();
-                Draw(population.GetLocations(), population.GetBest());
-            
+            var x = population.GetBest();
+                Draw(population.GetLocations(), x);
+
+            BestFitness.Text = Math.Round(population.population[x].fitness,5).ToString();
+            AvarageFitness.Text = Math.Round(population.GetAverageFitness(),5).ToString();
+
             population.Update(i);
+            
 
                 
             //population.NaturalSelection();
@@ -212,7 +225,7 @@ namespace mrowki
             {
                 timeOfLife = 0;
                 TimeOfLife.Text = 0.ToString();
-                MessageBox.Show("Musisz najpierw wyłączyć timer i po zmianie zresetować symulację.", "Mutacje", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Musisz najpierw wyłączyć timer i po zmianie zresetować symulację.", "Dane", MessageBoxButton.OK, MessageBoxImage.Warning);
                 timer.Stop();
             }
         }
@@ -295,7 +308,10 @@ namespace mrowki
                 i++;
             }
             UnDraw();
-            Draw(population.GetLocations(), population.GetBest());
+            var x = population.GetBest();
+            Draw(population.GetLocations(), x);
+            BestFitness.Text = Math.Round(population.population[x].fitness, 5).ToString();
+            AvarageFitness.Text = Math.Round(population.GetAverageFitness(), 5).ToString();
 
         }
         private void UnDraw()
